@@ -4,8 +4,8 @@ import time
 import HandTrackingModule as htm
 import autopy
 
-wCam,hCam = 648,488
-frameR = 100
+wCam, hCam = 648, 488
+frameR = 120
 
 cTime = 0
 pTime = 0
@@ -32,12 +32,12 @@ while True:
         #2. Check the tip of the index and middle fingers
         x1,y1 = lmlist[8][1:]
         x2,y2 = lmlist[12][1:]
-        #print(x1,y1,x2,y2)
+        
 
         #3. Check which fingers are up
         fingers = detector.fingersUp()
         cv2.rectangle(img,(frameR,frameR),(wCam-frameR,hCam-frameR),(255,0,255),2)
-        #print(fingers)
+    
         #4. Only Index finger : Moving mode
         if fingers[1]==1 and fingers[2]==0:
             #5. Convert coordinates
@@ -59,12 +59,28 @@ while True:
 
         #9. Find Distance between fingers
             length,img,lineInfo = detector.findDistance(8,12,img)
-            #print(length)
         #10. Click mouse if distance short
-            if length < 25:
+            if length < 22:
                 cv2.circle(img,(lineInfo[4],lineInfo[5]),15,(0,255,0),cv2.FILLED)
-                autopy.mouse.click()
+                autopy.mouse.toggle(down = True)
+                    #5. Convert coordinates
+                x3 = np.interp(x1,(frameR,wCam-frameR),(0,wScr))
+                y3 = np.interp(y1,(frameR,hCam-frameR),(0,hScr))
+                
+                #6. Smoothen values
+
+                clocX = plocX + (x3-plocX)/smoothening
+                clocY = plocY + (y3-plocY)/smoothening
+
+                #7. Move mouse
+                autopy.mouse.move(wScr-clocX,clocY)
+                
             
+            autopy.mouse.toggle(down = False)
+            
+                
+        
+        
 
         #11. Frame Rate
         
