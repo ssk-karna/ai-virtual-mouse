@@ -5,12 +5,12 @@ import HandTrackingModule as htm
 import autopy
 
 wCam, hCam = 648, 488
-frameR = 120
+frameR = 80
 
 cTime = 0
 pTime = 0
 
-smoothening = 7
+smoothening = 6
 plocX,plocY = 0,0
 clocX,clocY = 0,0
 
